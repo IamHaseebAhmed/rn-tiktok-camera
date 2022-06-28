@@ -3,11 +3,7 @@ import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
 import Video from 'react-native-video';
 
 const PreviewScreen = ({route, navigation}) => {
-  // const [videos, setVideos] = useState([
-  //   'https://static.videezy.com/system/resources/previews/000/012/318/original/Venice_5.mp4',
-  //   'http://techslides.com/demos/sample-videos/small.mp4',
-  //   'https://static.videezy.com/system/resources/previews/000/021/674/original/1-to-5-papers-falling.mp4',
-  // ]);
+
   const {data} = route.params;
   const [videos, setVideos] = useState(data);
   const [currPlayVid, setCurrPlayVideo] = useState(0);
