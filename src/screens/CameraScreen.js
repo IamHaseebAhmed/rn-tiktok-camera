@@ -3,6 +3,8 @@ import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import Svg, {Circle} from 'react-native-svg';
 
+import CaptureBtn from './CaptureBtn';
+
 const CameraScreen = ({navigation}) => {
   const cameraRef = useRef(null);
   const devices = useCameraDevices();
@@ -52,34 +54,37 @@ const CameraScreen = ({navigation}) => {
         style={StyleSheet.absoluteFill}
         isActive={true}
       />
-
       <View style={{marginTop: 10, marginLeft: 20}}>
         <Text style={{color: '#fff'}}>{`No. of Videos: ${videos.length}`}</Text>
       </View>
 
-      {!recordStatus ? (
-        <TouchableOpacity
-          activeOpacity={0.6}
-          onPress={() => setRecordStatus(!recordStatus)}
-          style={{
-            position: 'absolute',
-            bottom: 45,
-            alignSelf: 'center',
-          }}>
-          <Svg height="100" width="100">
-            <Circle
-              cx="50"
-              cy="50"
-              r="40"
-              stroke="rgba(156, 88, 243, 0.54)"
-              strokeWidth="5"
-              fill="none"
-            />
-            <Circle cx="50" cy="50" r="34" fill="rgba(156, 88, 243, 1)" />
-          </Svg>
-        </TouchableOpacity>
-      ) : null}
-      
+      {/* {!recordStatus ? ( */}
+      <TouchableOpacity
+        activeOpacity={0.6}
+        onPress={() => setRecordStatus(!recordStatus)}
+        style={{
+          position: 'absolute',
+          bottom: 45,
+          alignSelf: 'center',
+        }}>
+        <Svg height="100" width="100">
+          <Circle
+            cx="50"
+            cy="50"
+            r="40"
+            stroke="rgba(156, 88, 243, 0.54)"
+            strokeWidth="5"
+            fill="none"
+          />
+          <Circle cx="50" cy="50" r="34" fill="rgba(156, 88, 243, 1)" />
+        </Svg>
+      </TouchableOpacity>
+      {/* ) : null} */}
+
+      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <CaptureBtn />
+      </View>
+
       <TouchableOpacity
         onPress={() => navigation.navigate('PreviewScreen', {data: videos})}
         style={{
