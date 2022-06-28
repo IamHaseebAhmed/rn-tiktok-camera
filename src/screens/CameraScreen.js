@@ -1,6 +1,7 @@
 import React, {useRef, useState} from 'react';
 import {View, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
+import Svg, {Circle} from 'react-native-svg';
 
 const CameraScreen = ({navigation}) => {
   const cameraRef = useRef(null);
@@ -25,7 +26,7 @@ const CameraScreen = ({navigation}) => {
       onRecordingFinished: video => {
         console.log(video);
         let newData = videos;
-        newData.push(video.path)
+        newData.push(video.path);
 
         setVideos(newData);
         setRecordStatus(false);
@@ -53,23 +54,34 @@ const CameraScreen = ({navigation}) => {
       />
 
       <View style={{marginTop: 10, marginLeft: 20}}>
-        <Text style={{color: "#fff"}}>{`No. of Videos: ${videos.length}`}</Text>
+        <Text style={{color: '#fff'}}>{`No. of Videos: ${videos.length}`}</Text>
       </View>
 
+      {!recordStatus ? (
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => setRecordStatus(!recordStatus)}
+          style={{
+            position: 'absolute',
+            bottom: 45,
+            alignSelf: 'center',
+          }}>
+          <Svg height="100" width="100">
+            <Circle
+              cx="50"
+              cy="50"
+              r="40"
+              stroke="rgba(156, 88, 243, 0.54)"
+              strokeWidth="5"
+              fill="none"
+            />
+            <Circle cx="50" cy="50" r="34" fill="rgba(156, 88, 243, 1)" />
+          </Svg>
+        </TouchableOpacity>
+      ) : null}
+      
       <TouchableOpacity
-        onPress={recordStatus ? stopRecordVideo : recordVideo}
-        style={{
-          width: 80,
-          height: 80,
-          backgroundColor: recordStatus ? 'red' : 'green',
-          borderRadius: 40,
-          position: 'absolute',
-          bottom: 60,
-          alignSelf: 'center',
-        }}></TouchableOpacity>
-
-      <TouchableOpacity
-        onPress={() => navigation.navigate("PreviewScreen", {data: videos})}
+        onPress={() => navigation.navigate('PreviewScreen', {data: videos})}
         style={{
           width: 60,
           height: 30,
@@ -80,10 +92,10 @@ const CameraScreen = ({navigation}) => {
           bottom: 80,
           alignSelf: 'flex-end',
           justifyContent: 'center',
-          alignItems: 'center'
+          alignItems: 'center',
         }}>
-          <Text>DONE</Text>
-        </TouchableOpacity>
+        <Text>DONE</Text>
+      </TouchableOpacity>
     </View>
   );
 };
