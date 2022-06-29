@@ -58,32 +58,40 @@ const CameraScreen = ({navigation}) => {
         <Text style={{color: '#fff'}}>{`No. of Videos: ${videos.length}`}</Text>
       </View>
 
-      {/* {!recordStatus ? ( */}
-      <TouchableOpacity
-        activeOpacity={0.6}
-        onPress={() => setRecordStatus(!recordStatus)}
-        style={{
-          position: 'absolute',
-          bottom: 45,
-          alignSelf: 'center',
-        }}>
-        <Svg height="100" width="100">
-          <Circle
-            cx="50"
-            cy="50"
-            r="40"
-            stroke="rgba(156, 88, 243, 0.54)"
-            strokeWidth="5"
-            fill="none"
-          />
-          <Circle cx="50" cy="50" r="34" fill="rgba(156, 88, 243, 1)" />
-        </Svg>
-      </TouchableOpacity>
-      {/* ) : null} */}
-
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <CaptureBtn />
-      </View>
+      {!recordStatus ? (
+        <TouchableOpacity
+          activeOpacity={0.6}
+          onPress={() => setRecordStatus(!recordStatus)}
+          style={{
+            position: 'absolute',
+            bottom: 45,
+            alignSelf: 'center',
+          }}>
+          <Svg height="100" width="100">
+            <Circle
+              cx="50"
+              cy="50"
+              r="40"
+              stroke="rgba(156, 88, 243, 0.54)"
+              strokeWidth="5"
+              fill="none"
+            />
+            <Circle cx="50" cy="50" r="34" fill="rgba(156, 88, 243, 1)" />
+          </Svg>
+        </TouchableOpacity>
+      ) : (
+        <View
+          style={{
+            flex: 1,
+            // justifyContent: 'center',
+            // alignItems: 'center',
+            position: 'absolute',
+            bottom: 45,
+            alignSelf: 'center',
+          }}>
+          <CaptureBtn />
+        </View>
+      )}
 
       <TouchableOpacity
         onPress={() => navigation.navigate('PreviewScreen', {data: videos})}
