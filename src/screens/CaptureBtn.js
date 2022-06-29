@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 
 import Svg, {G, Circle, Rect} from 'react-native-svg';
+import DotPoints from './DotPoints';
 
 const {width, height} = Dimensions.get('window');
 
@@ -29,8 +30,8 @@ const CaptureBtn = () => {
     if (toValue <= 30) {
       return Animated.spring(progressAnimation, {
         toValue,
-        easing: Easing.linear,
-        stiffness: 10,
+        easing: Easing.ease,
+        stiffness: 20,
         useNativeDriver: true,
       }).start();
     }
@@ -45,8 +46,6 @@ const CaptureBtn = () => {
       value => {
         const strokeDashoffset =
           circumference - (circumference * value.value) / 30;
-
-        // console.log('strokeDashoffset: ', strokeDashoffset);
 
         if (progressRef?.current) {
           progressRef.current.setNativeProps({
@@ -99,26 +98,57 @@ const CaptureBtn = () => {
     return () => clearInterval(timer);
   }, [recording]);
 
-  let angle = 270;
-  let x, y;
+  // let angle = 270;
+  // let x, y;
 
-  x = Math.sin(angle * (Math.PI / 180)) * radius;
-  y = radius - radius * Math.cos(angle * (Math.PI / 180));
+  // x = Math.sin(angle * (Math.PI / 180)) * radius;
+  // y = radius - radius * Math.cos(angle * (Math.PI / 180));
 
-  if (angle > 180) {
-    angle = 90 - (180 - angle);
-    x = radius - radius * Math.cos(angle * (Math.PI / 180));
-    y = Math.sin(angle * (Math.PI / 180)) * radius;
-  }
-
-  // if (angle > 270) {
-  //   y *= -1
+  // if (angle > 180) {
+  //   angle = 90 - (180 - angle);
+  //   x = radius - radius * Math.cos(angle * (Math.PI / 180));
+  //   y = Math.sin(angle * (Math.PI / 180)) * radius;
   // }
 
-  console.log('x: ', x);
-  console.log('y: ', y);
-  
-  console.log("percentage: ", percentage);
+  // console.log('x: ', x);
+  // console.log('y: ', y);
+
+  // console.log("percentage: ", percentage);
+
+  const [data, setData] = useState([
+    // {
+    //   id: 0,
+    //   path: '',
+    //   duration: 3,
+    // },
+    // {
+    //   id: 1,
+    //   path: '',
+    //   duration: 6,
+    // },
+    // {
+    //   id: 1,
+    //   path: '',
+    //   duration: 10,
+    // },
+  ]);
+
+  let discardLastClipHander = () => {
+    let newArr = data.slice(0, -1);
+    let newPercent = 0;
+
+    if (newArr.length > 0) {
+      newPercent = newArr[newArr.length - 1].duration;
+    }
+
+    console.log('newPercent: ', newPercent);
+
+    // for (let i = 0; i < data.length; i++) {
+    //   newPercent += data[i].duration;
+    // }
+    setPercentage(newPercent);
+    setData(newArr);
+  };
 
   return (
     <View
@@ -127,9 +157,9 @@ const CaptureBtn = () => {
         borderRadius: 100,
       }}>
       <Svg width={size} height={size} style={{position: 'relative'}}>
-        <G rotation="-90" origin={center}>
+        {/* <G rotation="-90" origin={center}>
           <Circle cx={85 - y} cy={40 + x} r={3} fill="green" />
-        </G>
+        </G> */}
         <G rotation="-90" origin={center}>
           <Circle
             ref={progressRef}
@@ -148,17 +178,30 @@ const CaptureBtn = () => {
             strokeDasharray={circumference}
             strokeDashoffset={circumference - (circumference * 25) / 30}
           />
-          {/* <Circle cx={83} cy={65} r={3} fill="white" /> */}
+          {/* <Circle cx={87} cy={45} r={3} fill="red" /> */}
+          {data.map(el => {
+            let {cx, cy, id} = DotPoints[el.duration];
+            if (cx && cy) {
+              return <Circle key={id} cx={cx} cy={cy} r={3} fill="red" />;
+            }
+          })}
         </G>
       </Svg>
       <TouchableOpacity
-        disabled={percentage === 30}
         onPress={() => {
           if (!recording) {
             setRecording(true);
             return;
           }
           setRecording(false);
+
+          let newData = {
+            id: data.length,
+            path: '',
+            duration: percentage,
+          };
+
+          setData([...data, newData]);
         }}
         style={{
           backgroundColor: 'rgba(156, 88, 243, 1)',
@@ -171,6 +214,23 @@ const CaptureBtn = () => {
           height: 34 * 2,
           borderRadius: 34,
         }}></TouchableOpacity>
+
+      <TouchableOpacity
+        onPress={discardLastClipHander}
+        style={{
+          width: 60,
+          height: 30,
+          backgroundColor: '#fff',
+          // borderRadius: 40,
+          position: 'absolute',
+          right: 20,
+          bottom: 200,
+          alignSelf: 'flex-end',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}>
+        <Text>DELETE</Text>
+      </TouchableOpacity>
     </View>
   );
 };

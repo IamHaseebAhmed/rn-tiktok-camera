@@ -84,14 +84,14 @@ const CameraScreen = ({navigation}) => {
           style={{
             flex: 1,
             position: 'absolute',
-            bottom: 45,
+            bottom: 145,
             alignSelf: 'center',
           }}>
           <CaptureBtn />
         </View>
       )}
 
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() => navigation.navigate('PreviewScreen', {data: videos})}
         style={{
           width: 60,
@@ -106,7 +106,7 @@ const CameraScreen = ({navigation}) => {
           alignItems: 'center',
         }}>
         <Text>DONE</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };
