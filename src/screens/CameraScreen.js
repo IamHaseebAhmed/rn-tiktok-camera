@@ -86,7 +86,7 @@ const CameraScreen = ({navigation}) => {
             // justifyContent: 'center',
             // alignItems: 'center',
             position: 'absolute',
-            bottom: 45,
+            bottom: 120,
             alignSelf: 'center',
           }}>
           <CaptureBtn />

@@ -6,9 +6,12 @@ import {
   Animated,
   Easing,
   Alert,
+  Dimensions,
 } from 'react-native';
 
-import Svg, {G, Circle} from 'react-native-svg';
+import Svg, {G, Circle, Rect} from 'react-native-svg';
+
+const {width, height} = Dimensions.get('window');
 
 const CaptureBtn = () => {
   const size = 90;
@@ -16,6 +19,8 @@ const CaptureBtn = () => {
   const center = size / 2;
   const radius = size / 2 - strokeWidth / 2;
   const circumference = 2 * Math.PI * radius;
+
+  console.log('circumference:: ', circumference);
 
   const [recording, setRecording] = useState(true);
   const [percentage, setPercentage] = useState(0);
@@ -41,6 +46,8 @@ const CaptureBtn = () => {
       value => {
         const strokeDashoffset =
           circumference - (circumference * value.value) / 30;
+
+        console.log('strokeDashoffset: ', strokeDashoffset);
 
         if (progressRef?.current) {
           progressRef.current.setNativeProps({
@@ -78,14 +85,13 @@ const CaptureBtn = () => {
           }
           setPercentage(prev => {
             if (prev < 30) {
-              return prev + 1
+              return prev + 1;
             }
-            isComplete = true
+            isComplete = true;
             return;
           });
         }, 1000);
-      } 
-      else if (!recording) {
+      } else if (!recording) {
         console.log('stopped...');
         doClearIntervals(timer);
       }
@@ -94,24 +100,45 @@ const CaptureBtn = () => {
     return () => clearInterval(timer);
   }, [recording]);
 
+  let angle = 270;
+  let x, y;
+
+  x = Math.sin(angle * (Math.PI / 180)) * radius;
+  y = radius - radius * Math.cos(angle * (Math.PI / 180));
+
+  if (angle > 180) {
+    angle = 90 - (180 - angle);
+    x = (radius - radius * Math.cos(angle * (Math.PI / 180)));
+    y = Math.sin(angle * (Math.PI / 180)) * radius;
+  }
+
+  // if (angle > 270) {
+  //   y *= -1
+  // }
+
+  console.log('x: ', x);
+  console.log('y: ', y);
+
   return (
-    <View style={{backgroundColor: 'rgba(255, 255, 255, 0.7)', borderRadius: 100}}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: 'rgba(255, 255, 255, 0.7)',
+        // borderRadius: 100,
+        borderWidth: 1,
+        borderColor: 'red',
+      }}>
       <Svg width={size} height={size} style={{position: 'relative'}}>
+        <G rotation="-90" origin={center}>
+          <Circle cx={85 - y} cy={40 + x} r={3} fill="green" />
+        </G>
         <G rotation="-90" origin={center}>
           <Circle
             ref={progressRef}
-            // stroke="#E6E7E8"
             cx={center}
             cy={center}
             r={radius}
             strokeWidth={strokeWidth}
-            onPress={() => {
-              if (!recording) {
-                setRecording(true);
-                return;
-              }
-              setRecording(false);
-            }}
           />
           <Circle
             ref={progressRef}
@@ -123,6 +150,8 @@ const CaptureBtn = () => {
             strokeDasharray={circumference}
             strokeDashoffset={circumference - (circumference * 25) / 30}
           />
+          {/* <Circle cx={circumference} cy={circumference} r={3} fill="white" /> */}
+          {/* <Circle cx={83} cy={65} r={3} fill="white" /> */}
         </G>
       </Svg>
       <TouchableOpacity
@@ -134,7 +163,7 @@ const CaptureBtn = () => {
           setRecording(false);
         }}
         style={{
-          backgroundColor: 'rgba(156, 88, 243, 1)',
+          backgroundColor: 'rgba(156, 88, 243, .2)',
           position: 'absolute',
           // alignSelf: 'center',
           top: 11,
