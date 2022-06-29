@@ -20,18 +20,17 @@ const CaptureBtn = () => {
   const radius = size / 2 - strokeWidth / 2;
   const circumference = 2 * Math.PI * radius;
 
-  console.log('circumference:: ', circumference);
-
-  const [recording, setRecording] = useState(true);
+  const [recording, setRecording] = useState(false);
   const [percentage, setPercentage] = useState(0);
   const progressAnimation = useRef(new Animated.Value(0)).current;
   const progressRef = useRef(null);
 
   const animation = toValue => {
     if (toValue <= 30) {
-      return Animated.timing(progressAnimation, {
+      return Animated.spring(progressAnimation, {
         toValue,
-        easing: Easing.bounce,
+        easing: Easing.linear,
+        stiffness: 10,
         useNativeDriver: true,
       }).start();
     }
@@ -47,7 +46,7 @@ const CaptureBtn = () => {
         const strokeDashoffset =
           circumference - (circumference * value.value) / 30;
 
-        console.log('strokeDashoffset: ', strokeDashoffset);
+        // console.log('strokeDashoffset: ', strokeDashoffset);
 
         if (progressRef?.current) {
           progressRef.current.setNativeProps({
@@ -72,15 +71,15 @@ const CaptureBtn = () => {
 
     if (recording === true || recording === false) {
       if (recording) {
-        console.log('recording...');
+        // console.log('recording...');
         doClearIntervals(timer);
 
         timer = setInterval(() => {
-          console.log('inside running...', isComplete);
+          // console.log('inside running...', isComplete);
 
           if (isComplete) {
             doClearIntervals(timer);
-            console.log('post-stopped...');
+            // console.log('post-stopped...');
             return;
           }
           setPercentage(prev => {
@@ -92,7 +91,7 @@ const CaptureBtn = () => {
           });
         }, 1000);
       } else if (!recording) {
-        console.log('stopped...');
+        // console.log('stopped...');
         doClearIntervals(timer);
       }
     }
@@ -108,7 +107,7 @@ const CaptureBtn = () => {
 
   if (angle > 180) {
     angle = 90 - (180 - angle);
-    x = (radius - radius * Math.cos(angle * (Math.PI / 180)));
+    x = radius - radius * Math.cos(angle * (Math.PI / 180));
     y = Math.sin(angle * (Math.PI / 180)) * radius;
   }
 
@@ -118,15 +117,14 @@ const CaptureBtn = () => {
 
   console.log('x: ', x);
   console.log('y: ', y);
+  
+  console.log("percentage: ", percentage);
 
   return (
     <View
       style={{
-        flex: 1,
         backgroundColor: 'rgba(255, 255, 255, 0.7)',
-        // borderRadius: 100,
-        borderWidth: 1,
-        borderColor: 'red',
+        borderRadius: 100,
       }}>
       <Svg width={size} height={size} style={{position: 'relative'}}>
         <G rotation="-90" origin={center}>
@@ -150,11 +148,11 @@ const CaptureBtn = () => {
             strokeDasharray={circumference}
             strokeDashoffset={circumference - (circumference * 25) / 30}
           />
-          {/* <Circle cx={circumference} cy={circumference} r={3} fill="white" /> */}
           {/* <Circle cx={83} cy={65} r={3} fill="white" /> */}
         </G>
       </Svg>
       <TouchableOpacity
+        disabled={percentage === 30}
         onPress={() => {
           if (!recording) {
             setRecording(true);
@@ -163,7 +161,7 @@ const CaptureBtn = () => {
           setRecording(false);
         }}
         style={{
-          backgroundColor: 'rgba(156, 88, 243, .2)',
+          backgroundColor: 'rgba(156, 88, 243, 1)',
           position: 'absolute',
           // alignSelf: 'center',
           top: 11,

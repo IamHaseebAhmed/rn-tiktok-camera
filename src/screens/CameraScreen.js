@@ -58,7 +58,7 @@ const CameraScreen = ({navigation}) => {
         <Text style={{color: '#fff'}}>{`No. of Videos: ${videos.length}`}</Text>
       </View>
 
-      {!recordStatus ? (
+      {recordStatus ? (
         <TouchableOpacity
           activeOpacity={0.6}
           onPress={() => setRecordStatus(!recordStatus)}
@@ -83,10 +83,8 @@ const CameraScreen = ({navigation}) => {
         <View
           style={{
             flex: 1,
-            // justifyContent: 'center',
-            // alignItems: 'center',
             position: 'absolute',
-            bottom: 120,
+            bottom: 45,
             alignSelf: 'center',
           }}>
           <CaptureBtn />
