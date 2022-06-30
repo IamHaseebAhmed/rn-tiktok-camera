@@ -106,14 +106,10 @@ const CaptureBtn = () => {
   x = Math.sin(angle * (Math.PI / 180)) * radius;
   y = radius - radius * Math.cos(angle * (Math.PI / 180));
 
-  if (angle > 180) {
-    angle = 90 - (180 - angle);
-    x = (radius - radius * Math.cos(angle * (Math.PI / 180)));
-    y = Math.sin(angle * (Math.PI / 180)) * radius;
-  }
-
-  // if (angle > 270) {
-  //   y *= -1
+  // if (angle > 180) {
+  //   angle = 360 - angle;
+  //   x = -1 * (radius - radius * Math.cos(angle * (Math.PI / 180)));
+  //   y = Math.sin(angle * (Math.PI / 180)) * radius;
   // }
 
   console.log('x: ', x);
@@ -129,9 +125,6 @@ const CaptureBtn = () => {
         borderColor: 'red',
       }}>
       <Svg width={size} height={size} style={{position: 'relative'}}>
-        <G rotation="-90" origin={center}>
-          <Circle cx={85 - y} cy={40 + x} r={3} fill="green" />
-        </G>
         <G rotation="-90" origin={center}>
           <Circle
             ref={progressRef}
@@ -150,6 +143,7 @@ const CaptureBtn = () => {
             strokeDasharray={circumference}
             strokeDashoffset={circumference - (circumference * 25) / 30}
           />
+          <Circle cx={85 - y} cy={45 + x} r={3} fill="green" />
           {/* <Circle cx={circumference} cy={circumference} r={3} fill="white" /> */}
           {/* <Circle cx={83} cy={65} r={3} fill="white" /> */}
         </G>
