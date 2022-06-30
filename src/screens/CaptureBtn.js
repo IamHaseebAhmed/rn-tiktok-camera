@@ -98,40 +98,7 @@ const CaptureBtn = () => {
     return () => clearInterval(timer);
   }, [recording]);
 
-  // let angle = 270;
-  // let x, y;
-
-  // x = Math.sin(angle * (Math.PI / 180)) * radius;
-  // y = radius - radius * Math.cos(angle * (Math.PI / 180));
-
-  // if (angle > 180) {
-  //   angle = 90 - (180 - angle);
-  //   x = radius - radius * Math.cos(angle * (Math.PI / 180));
-  //   y = Math.sin(angle * (Math.PI / 180)) * radius;
-  // }
-
-  // console.log('x: ', x);
-  // console.log('y: ', y);
-
-  // console.log("percentage: ", percentage);
-
-  const [data, setData] = useState([
-    // {
-    //   id: 0,
-    //   path: '',
-    //   duration: 3,
-    // },
-    // {
-    //   id: 1,
-    //   path: '',
-    //   duration: 6,
-    // },
-    // {
-    //   id: 1,
-    //   path: '',
-    //   duration: 10,
-    // },
-  ]);
+  const [data, setData] = useState([]);
 
   let discardLastClipHander = () => {
     let newArr = data.slice(0, -1);
@@ -140,12 +107,6 @@ const CaptureBtn = () => {
     if (newArr.length > 0) {
       newPercent = newArr[newArr.length - 1].duration;
     }
-
-    console.log('newPercent: ', newPercent);
-
-    // for (let i = 0; i < data.length; i++) {
-    //   newPercent += data[i].duration;
-    // }
     setPercentage(newPercent);
     setData(newArr);
   };
@@ -157,9 +118,6 @@ const CaptureBtn = () => {
         borderRadius: 100,
       }}>
       <Svg width={size} height={size} style={{position: 'relative'}}>
-        {/* <G rotation="-90" origin={center}>
-          <Circle cx={85 - y} cy={40 + x} r={3} fill="green" />
-        </G> */}
         <G rotation="-90" origin={center}>
           <Circle
             ref={progressRef}
@@ -178,7 +136,6 @@ const CaptureBtn = () => {
             strokeDasharray={circumference}
             strokeDashoffset={circumference - (circumference * 25) / 30}
           />
-          {/* <Circle cx={87} cy={45} r={3} fill="red" /> */}
           {data.map(el => {
             let {cx, cy, id} = DotPoints[el.duration];
             if (cx && cy) {
@@ -206,7 +163,6 @@ const CaptureBtn = () => {
         style={{
           backgroundColor: 'rgba(156, 88, 243, 1)',
           position: 'absolute',
-          // alignSelf: 'center',
           top: 11,
           left: 11,
           right: 0,
