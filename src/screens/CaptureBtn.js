@@ -30,8 +30,8 @@ const CaptureBtn = () => {
     if (toValue <= 30) {
       return Animated.spring(progressAnimation, {
         toValue,
-        easing: Easing.ease,
-        stiffness: 20,
+        easing: Easing.bounce,
+        stiffness: 10,
         useNativeDriver: true,
       }).start();
     }
@@ -78,7 +78,13 @@ const CaptureBtn = () => {
 
           if (isComplete) {
             doClearIntervals(timer);
-            // console.log('post-stopped...');
+            let newData = {
+              id: data.length,
+              path: '',
+              duration: percentage,
+            };
+            setData([...data, newData]);
+            console.log('post-stopped...');
             return;
           }
           setPercentage(prev => {
@@ -107,6 +113,7 @@ const CaptureBtn = () => {
     if (newArr.length > 0) {
       newPercent = newArr[newArr.length - 1].duration;
     }
+
     setPercentage(newPercent);
     setData(newArr);
   };
@@ -136,10 +143,12 @@ const CaptureBtn = () => {
             strokeDasharray={circumference}
             strokeDashoffset={circumference - (circumference * 25) / 30}
           />
-          {data.map(el => {
-            let {cx, cy, id} = DotPoints[el.duration];
-            if (cx && cy) {
-              return <Circle key={id} cx={cx} cy={cy} r={3} fill="red" />;
+          {data.map((el, index) => {
+            if (el.duration) {
+              let {cx, cy, id} = DotPoints[el.duration];
+              if (cx && cy) {
+                return <Circle key={index + ":" + id} cx={cx} cy={cy} r={3} fill="#fff" />;
+              }
             }
           })}
         </G>
@@ -158,6 +167,7 @@ const CaptureBtn = () => {
             duration: percentage,
           };
           setData([...data, newData]);
+          console.log("Data: ", data);
         }}
         style={{
           backgroundColor: 'rgba(156, 88, 243, 1)',

@@ -1,5 +1,10 @@
 const DotPoints = [];
 
+DotPoints[0] = {
+  cx: 87,
+  cy: 45,
+}
+
 DotPoints[1] = {
   cx: 86,
   cy: 56,
