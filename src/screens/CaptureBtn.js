@@ -157,7 +157,6 @@ const CaptureBtn = () => {
             path: '',
             duration: percentage,
           };
-
           setData([...data, newData]);
         }}
         style={{
